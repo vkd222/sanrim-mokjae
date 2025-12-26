@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 - 산림목재</title>
+    <link rel="stylesheet" href="산림목재.css">
+    <style>
+        .board-container {
+            max-width: 1000px;
+            margin: 150px auto 5rem;
+            padding: 0 2rem;
+        }
+
+        .board-header {
+            background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+        }
+
+        .board-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .board-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .board-actions {
+            background: #f8f9fa;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #228B22;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-write {
+            background: #228B22;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-write:hover {
+            background: #32CD32;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(34, 139, 34, 0.3);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            border: 2px solid #228B22;
+            border-radius: 8px;
+            width: 300px;
+        }
+
+        .search-btn {
+            padding: 0.8rem 2rem;
+            background: #8B4513;
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #A0522D;
+        }
+
+        .board-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .board-table thead {
+            background: #228B22;
+            color: #fff;
+        }
+
+        .board-table th {
+            padding: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .board-table td {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .board-table tbody tr {
+            transition: background 0.3s;
+        }
+
+        .board-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .board-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .board-number {
+            width: 80px;
+            text-align: center;
+            color: #666;
+        }
+
+        .board-title {
+            width: auto;
+        }
+
+        .board-title a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .board-title a:hover {
+            color: #228B22;
+            text-decoration: underline;
+        }
+
+        .board-author {
+            width: 120px;
+            text-align: center;
+            color: #666;
+        }
+
+        .board-date {
+            width: 150px;
+            text-align: center;
+            color: #666;
+        }
+
+        .board-views {
+            width: 100px;
+            text-align: center;
+            color: #666;
+        }
+
+        .board-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 2rem;
+        }
+
+        .pagination-btn {
+            padding: 0.8rem 1.2rem;
+            background: #fff;
+            color: #228B22;
+            border: 2px solid #228B22;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background: #228B22;
+            color: #fff;
+        }
+
+        .pagination-btn.active {
+            background: #228B22;
+            color: #fff;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty-board {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: #999;
+            font-size: 1.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .board-container {
+                margin-top: 180px;
+            }
+
+            .board-header h1 {
+                font-size: 2rem;
+            }
+
+            .board-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .board-table {
+                font-size: 0.9rem;
+            }
+
+            .board-table th,
+            .board-table td {
+                padding: 1rem 0.5rem;
+                font-size: 1rem;
+            }
+
+            .board-table thead {
+                display: none;
+            }
+
+            .board-table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                padding: 1rem;
+            }
+
+            .board-table tbody td {
+                display: block;
+                text-align: right;
+                border-bottom: none;
+                padding: 0.5rem 0;
+            }
+
+            .board-table tbody td:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                color: #228B22;
+            }
+
+            .board-number,
+            .board-author,
+            .board-date,
+            .board-views {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 & 네비게이션 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1><a href="산림목재.html" style="color: inherit; text-decoration: none;">산림목재</a></h1>
+                <p class="slogan">목재 파렛트 판매, 제작 전문</p>
+            </div>
+            <nav class="nav">
+                <ul class="nav-menu">
+                    <li><a href="산림목재.html#about">회사소개</a></li>
+                    <li class="separator">|</li>
+                    <li><a href="산림목재.html#products">제품안내</a></li>
+                    <li class="separator">|</li>
+                    <li><a href="산림목재.html#gallery">제품사진</a></li>
+                    <li class="separator">|</li>
+                    <li><a href="산림목재.html#contact">문의하기</a></li>
+                    <li class="separator">|</li>
+                    <li><a href="산림목재.html#location">오시는길</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 게시판 컨테이너 -->
+    <div class="board-container">
+        <div class="board-header">
+            <h1>커뮤니티</h1>
+            <p>산림목재와 함께하는 소통 공간입니다</p>
+        </div>
+
+        <div class="board-actions">
+            <a href="#" class="btn-write" onclick="alert('글쓰기 기능은 준비 중입니다.'); return false;">글쓰기</a>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="검색어를 입력하세요">
+                <button class="search-btn" onclick="alert('검색 기능은 준비 중입니다.');">검색</button>
+            </div>
+        </div>
+
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th class="board-number">번호</th>
+                    <th class="board-title">제목</th>
+                    <th class="board-author">작성자</th>
+                    <th class="board-date">작성일</th>
+                    <th class="board-views">조회수</th>
+                </tr>
+            </thead>
+            <tbody id="board-list">
+                <tr>
+                    <td class="board-number" data-label="번호">5</td>
+                    <td class="board-title" data-label="제목">
+                        <a href="#">산림목재 신제품 출시 안내</a>
+                    </td>
+                    <td class="board-author" data-label="작성자">관리자</td>
+                    <td class="board-date" data-label="작성일">2025.01.15</td>
+                    <td class="board-views" data-label="조회수">125</td>
+                </tr>
+                <tr>
+                    <td class="board-number" data-label="번호">4</td>
+                    <td class="board-title" data-label="제목">
+                        <a href="#">목재 파렛트 주문 문의</a>
+                    </td>
+                    <td class="board-author" data-label="작성자">고객1</td>
+                    <td class="board-date" data-label="작성일">2025.01.12</td>
+                    <td class="board-views" data-label="조회수">89</td>
+                </tr>
+                <tr>
+                    <td class="board-number" data-label="번호">3</td>
+                    <td class="board-title" data-label="제목">
+                        <a href="#">친환경 목재의 장점</a>
+                    </td>
+                    <td class="board-author" data-label="작성자">관리자</td>
+                    <td class="board-date" data-label="작성일">2025.01.10</td>
+                    <td class="board-views" data-label="조회수">156</td>
+                </tr>
+                <tr>
+                    <td class="board-number" data-label="번호">2</td>
+                    <td class="board-title" data-label="제목">
+                        <a href="#">시공 문의 드립니다</a>
+                    </td>
+                    <td class="board-author" data-label="작성자">고객2</td>
+                    <td class="board-date" data-label="작성일">2025.01.08</td>
+                    <td class="board-views" data-label="조회수">67</td>
+                </tr>
+                <tr>
+                    <td class="board-number" data-label="번호">1</td>
+                    <td class="board-title" data-label="제목">
+                        <a href="#">산림목재 홈페이지 오픈 안내</a>
+                    </td>
+                    <td class="board-author" data-label="작성자">관리자</td>
+                    <td class="board-date" data-label="작성일">2025.01.01</td>
+                    <td class="board-views" data-label="조회수">234</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="board-pagination">
+            <button class="pagination-btn" disabled>이전</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">다음</button>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <p class="copyright">© 2025 산림목재. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="산림목재.js"></script>
+</body>
+</html>
+
